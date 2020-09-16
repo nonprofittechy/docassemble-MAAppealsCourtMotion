@@ -40,6 +40,7 @@ sections:
 ---
 id: interview_order_miscellaneous_motion
 code: |
+  interview_short_title = "Complete a Motion at the Appeals Court"
   # This is a placeholder to control logic flow in this interview
   nav.set_section('review_miscellaneous_motion')
   basic_questions_intro_screen 
@@ -69,7 +70,7 @@ comment: |
 id: Appeals Court - Motion
 continue button field: miscellaneous_motion_intro
 question: |
-  Appeals Court - Motion
+  Appeals Court - Miscellaneous Motion
 subquestion: |
   This form will help you complete a motion in your Appeals Court case.
 ---
