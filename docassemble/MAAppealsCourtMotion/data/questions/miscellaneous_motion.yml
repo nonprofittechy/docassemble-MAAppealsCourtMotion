@@ -1,0 +1,206 @@
+comment: |
+  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
+metadata:
+  title: |
+    Appeals Court - Motion
+  short title: |
+    Motion
+---
+comment: |
+  This section is used by MAVirtualCourts to control how some of the questions work.
+mandatory: True
+code: |
+  interview_metadata # make sure we initialize the object
+  if not defined("interview_metadata['miscellaneous_motion']"):
+    interview_metadata.initializeObject('miscellaneous_motion')
+  interview_metadata['miscellaneous_motion'].update({
+    'title': 'Appeals Court - Motion',
+    'short title': 'Motion',
+    'description': 'This form will help you complete a motion in your Appeals Court case.',
+    'original_form': 'a',
+    'allowed courts': [
+    ],
+    'categories': [
+      'Other',
+      'appeals',
+    ],
+    'logic block variable': 'miscellaneous_motion',
+    'attachment block variable': 'miscellaneous_motion_attachment',
+    'typical role': 'unknown',
+  })
+---
+include:
+  - docassemble.MAVirtualCourt:basic-questions.yml
+---
+features:
+  navigation: True
+---
+sections:
+  - review_miscellaneous_motion: Review your answers
+---
+id: interview_order_miscellaneous_motion
+code: |
+  # This is a placeholder to control logic flow in this interview
+  nav.set_section('review_miscellaneous_motion')
+  basic_questions_intro_screen 
+  miscellaneous_motion_intro
+  # Set the preferred/allowed courts for this interview
+  docket_numbers.there_are_any=True
+  users.gather()
+  evaluate_role
+  other_parties.gather()
+  motion_text  
+  motion_based_on
+  motion_title
+  users[0].address.address
+  users[0].email
+  service_date
+  str(defendants)
+  str(docket_numbers)
+  str(users)
+  signature_date
+  str(plaintiffs)
+  miscellaneous_motion_preview_question # Pre-canned preview screen
+  basic_questions_signature_flow
+  miscellaneous_motion = True
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+id: Appeals Court - Motion
+continue button field: miscellaneous_motion_intro
+question: |
+  Appeals Court - Motion
+subquestion: |
+  This form will help you complete a motion in your Appeals Court case.
+---
+id: Preview screen
+continue button field: miscellaneous_motion_preview_question
+question: |
+  Your form is almost finished
+subquestion: |
+  Here is a preview of the form you'll sign on the next page. 
+  
+   ${miscellaneous_motion_attachment['preview']}
+---
+id: Why do you need this motion?
+question: |
+  Why do you need this motion?
+subquestion: |
+  Explain why the Appeals Court should allow your motion. Include facts and the legal reasons that the judge should agree with your request.
+fields:
+  - 'Reason for motion': motion_based_on
+    input type: area
+---
+id: What are you asking the court to do?
+question: |
+  What are you asking the court to do?
+subquestion: |
+  Explain what you want the Appeals Court to do. Include the specific action you want the court to take or the order that you want the court to issue to the other side.
+fields:
+  - no label: motion_text
+    input type: area
+---
+id: Motion title
+question: |
+  Motion title
+subquestion: |
+  What will the "title" of your motion be? This is a brief description of what you want the court to do. For example, "Reconsider". It will appear after the words "MOTION FOR" in the final document.
+fields:
+  - 'Motion for': motion_title
+---
+id: When and how will you serve ${ other_parties.familiar() }?
+question: |
+  When and how will you serve ${ other_parties.familiar() }?
+subquestion: |
+  Placeholder text
+fields:
+  - 'Date of service': service_date
+    datatype: date
+  - 'Service method': service_method
+    choices:
+      - Mail: mail
+      - In person: in hand
+      - Email: email
+      - Other: other
+  - Other: service_method
+    show if:
+      variable: service_method
+      is: other
+---
+progress: 100
+mandatory: True
+id: download screen
+question: |
+  Your motion is ready
+subquestion: |
+  Your motion is ready for you to download. You still need
+  to get a copy of it to the Appeals Court and to 
+  ${ other_parties.familiar() }.
+  
+  ### Next steps
+  
+  1. Step 1
+  1. Step 2
+  
+  Below is a preview of your form.
+  
+  ${miscellaneous_motion_attachment['final'].pdf }
+need: miscellaneous_motion
+attachment code: miscellaneous_motion_attachment['final']
+---
+objects:
+  - miscellaneous_motion_attachment: DADict
+---
+attachment:
+    variable name: miscellaneous_motion_attachment[i]
+    name: Motion
+    filename: Motion
+    docx template file: miscellaneous_motion.docx
+---
+id: miscellaneous_motion review screen
+event: review_miscellaneous_motion
+question: |
+  Review your answers
+subquestion: |
+  Edit your answers below
+review: 
+  - Edit: service_date
+    button: |
+      Date of service:
+      ${ service_date.format() }
+  - Edit: motion_title
+    button: |
+      Motion title:
+      ${ motion_title }
+  - Edit: motion_based_on
+    button: |
+      Reason for motion:
+      > ${ single_paragraph(motion_based_on) }
+  - Edit: motion_text
+    button: |
+      Text of motion:
+      > ${ single_paragraph(motion_text) }
+  - Edit: service_method
+    button: |
+      Service method:
+      ${ service_method }
+  - Edit: defendants[0].name.first
+    button: |
+      defendants:
+      ${ defendants }
+  - Edit: docket_numbers[0].name.first
+    button: |
+      docket_numbers:
+      ${ docket_numbers }
+  - Edit: signature_date
+    button: |
+      signature_date:
+      ${ signature_date }
+  - Edit: plaintiffs[0].name.first
+    button: |
+      plaintiffs:
+      ${ plaintiffs }
+  - Edit: user.signature
+    button: |
+      user.signature:
+      ${ user.signature }
