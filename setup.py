@@ -43,7 +43,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.MAAppealsCourtMotion',
-      version='0.0.2',
+      version='0.0.3',
       description=('A generic motion form for the Massachusetts Appeals Court'),
       long_description='# docassemble.MAAppealsCourtMotion\r\n\r\nA generic motion form for the Massachusetts Appeals Court\r\n\r\n## Author\r\n\r\nSystem Administrator, admin@admin.com\r\n\r\n',
       long_description_content_type='text/markdown',

@@ -1,10 +1,4 @@
-comment: |
-  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
-metadata:
-  title: |
-    Appeals Court - Motion
-  short title: |
-    Motion
+
 ---
 comment: |
   This section is used by MAVirtualCourts to control how some of the questions work.
@@ -32,6 +26,14 @@ code: |
 include:
   - docassemble.MAVirtualCourt:basic-questions.yml
 ---
+comment: |
+  The metadata section controls the tab title and saved interview title. You can delete this section if you include this YAML file in another YAML file.
+metadata:
+  title: |
+    Appeals Court - Miscellaneous Motion
+  short title: |
+    Motion  
+---
 features:
   navigation: True
 ---
@@ -53,8 +55,9 @@ code: |
   motion_text  
   motion_based_on
   motion_title
-  users[0].address.address
-  users[0].email
+  for user in users:
+    user.address.address
+    user.email
   service_date
   str(defendants)
   str(docket_numbers)
